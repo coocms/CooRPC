@@ -1,0 +1,3 @@
+C:\Users\coocms\Desktop\CoocGithub\coocms\CooRPC\CooRPC\CooRPCServer\bin\Debug\net5.0\CooRPCServer.exe
+C:\Users\coocms\Desktop\CoocGithub\coocms\CooRPC\CooRPC\CooRPCServer\bin\Debug\net5.0\CooRPCServer.dll
+C:\Users\coocms\Desktop\CoocGithub\coocms\CooRPC\CooRPC\CooRPCServer\bin\Debug\net5.0\CooRPCCore.dll
