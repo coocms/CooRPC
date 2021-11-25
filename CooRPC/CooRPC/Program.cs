@@ -7,7 +7,7 @@ namespace CooRPC
     {
         static void Main(string[] args)
         {
-            CooClient client = new CooClient() { ip = "127.0.0.1", port = 8909};
+            CooClient client = new CooClient() { ip = "127.0.0.1", port = 1231};
             client.Start();
 
             while (true)

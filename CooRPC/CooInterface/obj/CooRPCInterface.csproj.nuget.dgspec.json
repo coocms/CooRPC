@@ -1,20 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\coocms\\Desktop\\CoocGithub\\coocms\\CooRPC\\CooRPC\\CooInterface\\CooRPCInterface.csproj": {}
+    "C:\\Users\\jiajunchen\\Desktop\\github\\CooRPC\\CooRPC\\CooInterface\\CooRPCInterface.csproj": {}
   },
   "projects": {
-    "C:\\Users\\coocms\\Desktop\\CoocGithub\\coocms\\CooRPC\\CooRPC\\CooInterface\\CooRPCInterface.csproj": {
+    "C:\\Users\\jiajunchen\\Desktop\\github\\CooRPC\\CooRPC\\CooInterface\\CooRPCInterface.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\coocms\\Desktop\\CoocGithub\\coocms\\CooRPC\\CooRPC\\CooInterface\\CooRPCInterface.csproj",
+        "projectUniqueName": "C:\\Users\\jiajunchen\\Desktop\\github\\CooRPC\\CooRPC\\CooInterface\\CooRPCInterface.csproj",
         "projectName": "CooRPCInterface",
-        "projectPath": "C:\\Users\\coocms\\Desktop\\CoocGithub\\coocms\\CooRPC\\CooRPC\\CooInterface\\CooRPCInterface.csproj",
-        "packagesPath": "C:\\Users\\coocms\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\coocms\\Desktop\\CoocGithub\\coocms\\CooRPC\\CooRPC\\CooInterface\\obj\\",
+        "projectPath": "C:\\Users\\jiajunchen\\Desktop\\github\\CooRPC\\CooRPC\\CooInterface\\CooRPCInterface.csproj",
+        "packagesPath": "C:\\Users\\jiajunchen\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\jiajunchen\\Desktop\\github\\CooRPC\\CooRPC\\CooInterface\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
         "configFilePaths": [
-          "C:\\Users\\coocms\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\jiajunchen\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -54,7 +57,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.100-preview.5.21302.13\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.403\\RuntimeIdentifierGraph.json"
         }
       }
     }

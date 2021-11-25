@@ -12,7 +12,7 @@ namespace CooRPCCore
     public class CooClient
     {
         public string ip { get; init; }
-        public int port { get; init; } = 8908;
+        public int port { get; init; } = 1231;
         Socket tcpClient;
         public void Start()
         {

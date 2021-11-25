@@ -11,7 +11,7 @@ namespace CoocRPCCore
         public int port { get; init; } = 8908;
         TcpListener tcpListener;
 
-        List<TcpClient> clients = new List<TcpClient>();
+        List<TcpClient> clients { get; set; } = new List<TcpClient>();
         public void Start()
         {
             Thread thread = new Thread(ReceiveClientThread);

@@ -1,10 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "49k4DezKtqmYhxn5upS922Kj5fgsP4gbxPIubmrKoe3seq5NVOgUv6R4qxeZbfn2Rk+ElKunaQHfxa02gqX6iw==",
+  "dgSpecHash": "gmYD+JkROJ09LBYenqPZ2UJI9bt/eYX+VNLae2ym+3XPvO+TEynTudrb4X2exq53eBypjQWZYxixwwpQ4p/09g==",
   "success": true,
-  "projectFilePath": "C:\\Users\\coocms\\Desktop\\CoocGithub\\coocms\\CooRPC\\CooRPC\\CooRPCServer\\CooRPCServer.csproj",
-  "expectedPackageFiles": [
-    "C:\\Users\\coocms\\.nuget\\packages\\microsoft.netcore.app.host.win-x64\\5.0.5\\microsoft.netcore.app.host.win-x64.5.0.5.nupkg.sha512"
-  ],
+  "projectFilePath": "C:\\Users\\jiajunchen\\Desktop\\github\\CooRPC\\CooRPC\\CooRPCServer\\CooRPCServer.csproj",
+  "expectedPackageFiles": [],
   "logs": []
 }

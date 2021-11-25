@@ -1,20 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\coocms\\Desktop\\CoocGithub\\coocms\\CooRPC\\CooRPC\\CooRPCServer\\CooRPCServer.csproj": {}
+    "C:\\Users\\jiajunchen\\Desktop\\github\\CooRPC\\CooRPC\\CooRPCServer\\CooRPCServer.csproj": {}
   },
   "projects": {
-    "C:\\Users\\coocms\\Desktop\\CoocGithub\\coocms\\CooRPC\\CooRPC\\CoocRPCCore\\CooRPCCore.csproj": {
+    "C:\\Users\\jiajunchen\\Desktop\\github\\CooRPC\\CooRPC\\CoocRPCCore\\CooRPCCore.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\coocms\\Desktop\\CoocGithub\\coocms\\CooRPC\\CooRPC\\CoocRPCCore\\CooRPCCore.csproj",
+        "projectUniqueName": "C:\\Users\\jiajunchen\\Desktop\\github\\CooRPC\\CooRPC\\CoocRPCCore\\CooRPCCore.csproj",
         "projectName": "CooRPCCore",
-        "projectPath": "C:\\Users\\coocms\\Desktop\\CoocGithub\\coocms\\CooRPC\\CooRPC\\CoocRPCCore\\CooRPCCore.csproj",
-        "packagesPath": "C:\\Users\\coocms\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\coocms\\Desktop\\CoocGithub\\coocms\\CooRPC\\CooRPC\\CoocRPCCore\\obj\\",
+        "projectPath": "C:\\Users\\jiajunchen\\Desktop\\github\\CooRPC\\CooRPC\\CoocRPCCore\\CooRPCCore.csproj",
+        "packagesPath": "C:\\Users\\jiajunchen\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\jiajunchen\\Desktop\\github\\CooRPC\\CooRPC\\CoocRPCCore\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
         "configFilePaths": [
-          "C:\\Users\\coocms\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\jiajunchen\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -54,21 +57,24 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.100-preview.5.21302.13\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.403\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\coocms\\Desktop\\CoocGithub\\coocms\\CooRPC\\CooRPC\\CooRPCServer\\CooRPCServer.csproj": {
+    "C:\\Users\\jiajunchen\\Desktop\\github\\CooRPC\\CooRPC\\CooRPCServer\\CooRPCServer.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\coocms\\Desktop\\CoocGithub\\coocms\\CooRPC\\CooRPC\\CooRPCServer\\CooRPCServer.csproj",
+        "projectUniqueName": "C:\\Users\\jiajunchen\\Desktop\\github\\CooRPC\\CooRPC\\CooRPCServer\\CooRPCServer.csproj",
         "projectName": "CooRPCServer",
-        "projectPath": "C:\\Users\\coocms\\Desktop\\CoocGithub\\coocms\\CooRPC\\CooRPC\\CooRPCServer\\CooRPCServer.csproj",
-        "packagesPath": "C:\\Users\\coocms\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\coocms\\Desktop\\CoocGithub\\coocms\\CooRPC\\CooRPC\\CooRPCServer\\obj\\",
+        "projectPath": "C:\\Users\\jiajunchen\\Desktop\\github\\CooRPC\\CooRPC\\CooRPCServer\\CooRPCServer.csproj",
+        "packagesPath": "C:\\Users\\jiajunchen\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\jiajunchen\\Desktop\\github\\CooRPC\\CooRPC\\CooRPCServer\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
         "configFilePaths": [
-          "C:\\Users\\coocms\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\jiajunchen\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -82,8 +88,8 @@
           "net5.0": {
             "targetAlias": "net5.0",
             "projectReferences": {
-              "C:\\Users\\coocms\\Desktop\\CoocGithub\\coocms\\CooRPC\\CooRPC\\CoocRPCCore\\CooRPCCore.csproj": {
-                "projectPath": "C:\\Users\\coocms\\Desktop\\CoocGithub\\coocms\\CooRPC\\CooRPC\\CoocRPCCore\\CooRPCCore.csproj"
+              "C:\\Users\\jiajunchen\\Desktop\\github\\CooRPC\\CooRPC\\CoocRPCCore\\CooRPCCore.csproj": {
+                "projectPath": "C:\\Users\\jiajunchen\\Desktop\\github\\CooRPC\\CooRPC\\CoocRPCCore\\CooRPCCore.csproj"
               }
             }
           }
@@ -107,18 +113,12 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "downloadDependencies": [
-            {
-              "name": "Microsoft.NETCore.App.Host.win-x64",
-              "version": "[5.0.5, 5.0.5]"
-            }
-          ],
           "frameworkReferences": {
             "Microsoft.NETCore.App": {
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.100-preview.5.21302.13\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.403\\RuntimeIdentifierGraph.json"
         }
       }
     }
