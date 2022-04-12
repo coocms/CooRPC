@@ -20,22 +20,22 @@ namespace CooRPCCore
         {
             
 
-            Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
+            //Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
 
-            foreach (Assembly ass in assemblies)
-            {
-                List<Type> t = ass.GetTypes().ToList().Where(type =>
-                {
-                    return type.GetInterfaces().Where(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(ICoocRPCService<>)).Count() > 0;
+            //foreach (Assembly ass in assemblies)
+            //{
+            //    List<Type> t = ass.GetTypes().ToList().Where(type =>
+            //    {
+            //        return type.GetInterfaces().Where(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(ICoocRPCService<>)).Count() > 0;
 
-                })?.ToList();
+            //    })?.ToList();
 
-                t.ForEach(o =>
-                {
-                    if (!typeDic.ContainsKey(o.Name))
-                        typeDic.Add(o.Name, o);
-                });
-            }
+            //    t.ForEach(o =>
+            //    {
+            //        if (!typeDic.ContainsKey(o.Name))
+            //            typeDic.Add(o.Name, o);
+            //    });
+            //}
 
 
         }

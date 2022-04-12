@@ -68,11 +68,19 @@ namespace CooRPCCore
         {
             Type iServiceType = iServiceTypes.FirstOrDefault(o => o.FullName == requestModel.assemblyName);
             if (iServiceType == null)
+            {
+                Console.WriteLine("iServiceType = null");
                 return null;
+            }
+                
             var service = container.Resolve(iServiceType);
             var method = service.GetType().GetMethods().FirstOrDefault(o => o.Name == requestModel.methodName);
             if (method == null)
+            {
+                Console.WriteLine("method = null");
                 return null;
+            }
+                
             if (!(method.GetParameters().Count() == requestModel.args.Count))
             {
                 Console.WriteLine("!(method.GetParameters().Count() == requestModel.args.Count)");
