@@ -17,7 +17,7 @@ namespace RPCServerExec2
 
 
 
-            new CooRPCCore.CooRPCServer("127.0.0.1", 8909);
+            new CooRPCCore.CooRPCServer("0.0.0.0", 8909);
 
 
 
