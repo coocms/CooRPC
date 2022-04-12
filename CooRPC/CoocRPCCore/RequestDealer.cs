@@ -4,6 +4,7 @@ using CooRPCCore.Interface;
 using CooRPCCore.Model;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -38,7 +39,19 @@ namespace CooRPCCore
         System.Collections.Concurrent.ConcurrentQueue<ResultModel> resultModelQueue = new System.Collections.Concurrent.ConcurrentQueue<ResultModel>();
         static RequestDealer()
         {
-            Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
+
+            //Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
+            List<Assembly> assemblies = new List<Assembly>();
+
+            List<string> files = Directory.GetFiles(Directory.GetCurrentDirectory()).ToList().Where(o => o.Contains(".dll") && !o.Contains("System.") && !o.Contains("Microsoft.")).ToList();
+            files.ForEach(o =>
+            {
+                assemblies.Add(Assembly.LoadFile(o));
+            });
+
+            
+
+            
             assemblies.ToList().ForEach(o =>
             {
                 Console.WriteLine(o.FullName);
