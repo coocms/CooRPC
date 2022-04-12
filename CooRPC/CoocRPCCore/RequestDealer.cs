@@ -39,6 +39,10 @@ namespace CooRPCCore
         static RequestDealer()
         {
             Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
+            assemblies.ToList().ForEach(o =>
+            {
+                Console.WriteLine(o.FullName);
+            });
             List<Type> serviceTypes = new List<Type>();
             foreach (Assembly ass in assemblies)
             {
@@ -56,6 +60,7 @@ namespace CooRPCCore
                 Type IServiceType = item.GetInterfaces().Where(o=>o.IsGenericType == false).FirstOrDefault();
                 if (IServiceType != null)
                 {
+                    Console.WriteLine("register type = {0} iservice type = {1}", item.FullName, IServiceType.FullName);
                     builder.RegisterType(item).As(IServiceType);
                     iServiceTypes.Add(IServiceType);
                 }   
