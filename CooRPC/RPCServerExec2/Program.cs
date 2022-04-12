@@ -22,7 +22,12 @@ namespace RPCServerExec2
 
 
 
-            Console.Read();
+            while (true)
+            {
+                Console.WriteLine("Health Check");
+                Thread.Sleep(100000);
+                
+            }
         }
     }
 }
