@@ -108,43 +108,43 @@ namespace CooRPCCore
             var res = method.Invoke(service, requestModel.args.ToArray());
             return res;
         }
-        public void RequestSplit(TcpServer server)
+        public void RequestSplit(TcpServer server, Func<byte[], Type, object> deserializeFunc)
         {
-            string temp = "";
+            List<byte> temp = new List<byte>();
             System.Collections.Concurrent.ConcurrentQueue<TcpMessageModel> tcpStringQueue = server.TcpStringQueue;
             while (true)
             {
                 bool bFirstNotParse = false;
                 if (tcpStringQueue.TryDequeue(out TcpMessageModel tcpStringModel))
                 {
-                    List<string> requests = tcpStringModel.message.Split("|").ToList();
-                    if (!string.IsNullOrEmpty(temp))
+                    //List<string> requests = tcpStringModel.message. Split("|").ToList();
+                    List<byte[]> requests = ByteSplit(tcpStringModel.message, ((byte)'|'));
+                    if (temp.Count > 0)
                     {
-                        temp += requests.First();
-                        var request = Newtonsoft.Json.JsonConvert.DeserializeObject<RequestModel>(temp);
-                        
+                        temp.AddRange(requests.First());
+                        var request = deserializeFunc(temp.ToArray(), typeof(RequestModel)) as RequestModel;
                         requestModelQueue.Enqueue(new RequestModelContext { request = request, client = tcpStringModel.client, guid = request.guid});
-                        Console.WriteLine("服务端收到的 RequestModelContext count = " + requestModelQueue.Count);
-                        temp = "";
+
+                        temp.Clear();
                         bFirstNotParse = true;
                     }
 
-                    string lastMessage = requests.Last();
-                    if (!string.IsNullOrEmpty(lastMessage))
+                    byte[] lastMessage = requests.Last();
+                    if (lastMessage.Length > 0)
                     {
                         //最后一组数据有值
-                        temp = lastMessage;
+                        temp = lastMessage.ToList();
                     }
 
                     for (int i = bFirstNotParse ? 1 : 0; i < requests.Count - 1; i++)
                     {
                         RequestModel request = null;
+                        request = deserializeFunc(requests[i], typeof(RequestModel)) as RequestModel;
 
-                        request = Newtonsoft.Json.JsonConvert.DeserializeObject<RequestModel>(requests[i].Trim());
                         if (request == null)
                             continue;
                         requestModelQueue.Enqueue(new RequestModelContext { request = request, client = tcpStringModel.client, guid = request.guid});
-                        Console.WriteLine("服务端收到的 RequestModelContext count = " + requestModelQueue.Count);
+                        
                         //var res = Call(request);
                         //messageModel.client.GetStream().WriteAsync(System.Text.Encoding.UTF8.GetBytes(Newtonsoft.Json.JsonConvert.SerializeObject(new ResponseModel { resultList = res, guid = request.guid })));
 
@@ -154,7 +154,29 @@ namespace CooRPCCore
                 Thread.Sleep(10);
             }
         }
+        static List<byte[]> ByteSplit(byte[] bytes, byte splitByte)
+        {
+            List<byte[]> res = new List<byte[]>();
 
+            List<byte> temp = new List<byte>();
+            for (int i = 0; i < bytes.Length; i++)
+            {
+
+                if (bytes[i] == splitByte)
+                {
+                    if (temp.Count != 0)
+                    {
+                        res.Add(temp.ToArray());
+                        temp.Clear();
+                    }
+                }
+                else
+                {
+                    temp.Add(bytes[i]);
+                }
+            }
+            return res;
+        }
 
         public void RequestDeal()
         {
@@ -171,7 +193,7 @@ namespace CooRPCCore
             }
         }
 
-        public void ResultSendToClient()
+        public void ResultSendToClient(Func<object, string> serializeFunc)
         {
             while (true)
             {
@@ -179,7 +201,7 @@ namespace CooRPCCore
                 if (resultModelQueue.TryDequeue(out resultModel))
                 {
                     System.Net.Sockets.TcpClient client = resultModel.client;
-                    string responseMessage = Newtonsoft.Json.JsonConvert.SerializeObject(new ResponseModel { resultList = resultModel.result, guid = resultModel.guid });
+                    string responseMessage = serializeFunc(new ResponseModel { resultList = resultModel.result, guid = resultModel.guid });
                     client.GetStream().WriteAsync(Encoding.UTF8.GetBytes(responseMessage + "|"));
                 }
                 Thread.Sleep(10);

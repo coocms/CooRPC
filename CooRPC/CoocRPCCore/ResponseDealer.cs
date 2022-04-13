@@ -14,39 +14,41 @@ namespace CooRPCCore
 
         List<ResponseModel> responseModelsList = new List<ResponseModel>();
         readonly object responseListLock = new object();
-        public void ResponseSplit(TcpClient client)
+        public void ResponseSplit(TcpClient client, Func<byte[], Type, object> deserilizeFunc)
         {
-            string temp = "";
-            System.Collections.Concurrent.ConcurrentQueue<string> tcpStringQueue = client.responseMessage;
+            List<byte> temp = new List<byte>();
+            System.Collections.Concurrent.ConcurrentQueue<byte[]> tcpStringQueue = client.responseMessage;
             while (true)
             {
                 bool bFirstNotParse = false;
-                if (tcpStringQueue.TryDequeue(out string tcpString))
+                if (tcpStringQueue.TryDequeue(out byte[] tbyte))
                 {
-                    List<string> response = tcpString.Split("|").ToList();
-                    if (!string.IsNullOrEmpty(temp))
+                    List<byte[]> response = ByteSplit(tbyte, ((byte)'|'));
+                    //List<string> response = tbyte.Split("|").ToList();
+                    if (temp.Count > 0)
                     {
-                        temp += response.First();
-                        var responseModel = Newtonsoft.Json.JsonConvert.DeserializeObject<ResponseModel>(temp);
+                        temp.AddRange(response.First());
+                        var responseModel = deserilizeFunc(temp.ToArray(), typeof(ResponseModel)) as ResponseModel;
                         responseModels.Enqueue(responseModel);
 
 
-                        temp = "";
+                        temp.Clear();
                         bFirstNotParse = true;
                     }
 
-                    string lastMessage = response.Last();
-                    if (!string.IsNullOrEmpty(lastMessage))
+                    byte[] lastMessage = response.Last();
+                    if (lastMessage.Length > 0)
                     {
                         //最后一组数据有值
-                        temp = lastMessage;
+                        temp = lastMessage.ToList();
                     }
 
                     for (int i = bFirstNotParse ? 1 : 0; i < response.Count - 1; i++)
                     {
                         ResponseModel responseModel = null;
 
-                        responseModel = Newtonsoft.Json.JsonConvert.DeserializeObject<ResponseModel>(response[i].Trim());
+                        
+                        responseModel = deserilizeFunc(response[i], typeof(ResponseModel)) as ResponseModel;
                         if (responseModel == null)
                             continue;
                         responseModels.Enqueue(responseModel);
@@ -56,7 +58,29 @@ namespace CooRPCCore
                 Thread.Sleep(10);
             }
         }
+        static List<byte[]> ByteSplit(byte[] bytes, byte splitByte)
+        {
+            List<byte[]> res = new List<byte[]>();
 
+            List<byte> temp = new List<byte>();
+            for (int i = 0; i < bytes.Length; i++)
+            {
+
+                if (bytes[i] == splitByte)
+                {
+                    if (temp.Count != 0)
+                    {
+                        res.Add(temp.ToArray());
+                        temp.Clear();
+                    }
+                }
+                else
+                {
+                    temp.Add(bytes[i]);
+                }
+            }
+            return res;
+        }
         public void DequeueResToList()
         {
             while (true)

@@ -21,7 +21,7 @@ namespace CooRPCCore
 
         bool bStart = false;
 
-        public ConcurrentQueue<string> responseMessage = new ConcurrentQueue<string>();
+        public ConcurrentQueue<byte[]> responseMessage = new ConcurrentQueue<byte[]>();
 
         public void Start()
         {
@@ -50,6 +50,10 @@ namespace CooRPCCore
 
             byte[] buff = Encoding.ASCII.GetBytes(msg);
             tcpClient.BeginSend(Encoding.UTF8.GetBytes(msg), 0, buff.Length, 0, null, null);
+        }
+        public void Send(byte[] bytes)
+        {
+            tcpClient.BeginSend(bytes, 0, bytes.Length, 0, null, null);
         }
         List<string> receiveMessages = new List<string>();
         private readonly object msgLock = new object();
@@ -89,8 +93,8 @@ namespace CooRPCCore
             while (true)
             {
                 int length = tcpClient.Receive(data);
-                string message = Encoding.UTF8.GetString(data, 0, length);//只将接收到的数据进行转化
-                responseMessage.Enqueue(message);
+                
+                responseMessage.Enqueue(data);
             }
 
         }

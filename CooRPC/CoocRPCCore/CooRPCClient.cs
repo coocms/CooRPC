@@ -16,39 +16,42 @@ namespace CooRPCCore
     {
         static Dictionary<string, Type> typeDic = new Dictionary<string, Type>();
 
-        static CooRPCClient()
-        {
-            
-
-            //Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
-
-            //foreach (Assembly ass in assemblies)
-            //{
-            //    List<Type> t = ass.GetTypes().ToList().Where(type =>
-            //    {
-            //        return type.GetInterfaces().Where(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(ICoocRPCService<>)).Count() > 0;
-
-            //    })?.ToList();
-
-            //    t.ForEach(o =>
-            //    {
-            //        if (!typeDic.ContainsKey(o.Name))
-            //            typeDic.Add(o.Name, o);
-            //    });
-            //}
-
-
-        }
-
         public TcpClient client;
         public ResponseDealer responseDealer = new ResponseDealer();
-        public CooRPCClient(string ip, int port)
+        Func<object, byte[]> serializeFunc = o =>
+        {
+            return Encoding.ASCII.GetBytes(Newtonsoft.Json.JsonConvert.SerializeObject(o));
+        };
+        Func<byte[], Type, object> deserializeFunc = (o, t) =>
+        {
+            return Newtonsoft.Json.JsonConvert.DeserializeObject(Encoding.ASCII.GetString(o), t);
+        };
+        public CooRPCClient()
+        {
+        }
+        public CooRPCClient ConfigSerialize(Func<object, byte[]> serializeFunc)
+        {
+            this.serializeFunc = serializeFunc;
+            return this;
+        }
+        public CooRPCClient ConfigDeserialize(Func<byte[], Type, object> deserializeFunc)
+        {
+            this.deserializeFunc = deserializeFunc;
+            return this;
+        }
+        public CooRPCClient ConfigConnection(string ip, int port)
         {
             client = new TcpClient() { ip = ip, port = port };
+            
+            return this;
+        }
+        public void Build()
+        {
             client.Start();
-            myIntercept = new MyInterceptor(client, responseDealer);
 
-            Thread thread = new Thread(()=>responseDealer.ResponseSplit(client));
+            myIntercept = new MyInterceptor(client, responseDealer, serializeFunc);
+
+            Thread thread = new Thread(() => responseDealer.ResponseSplit(client, deserializeFunc));
             thread.IsBackground = true;
             thread.Start();
 
@@ -61,11 +64,14 @@ namespace CooRPCCore
         {
             TcpClient client;
             ResponseDealer responseDealer;
-            System.Collections.Concurrent.ConcurrentQueue<string> requestMsgs = new System.Collections.Concurrent.ConcurrentQueue<string>();
-            public MyInterceptor(TcpClient client, ResponseDealer responseDealer)
+            System.Collections.Concurrent.ConcurrentQueue<byte[]> requestMsgs = new System.Collections.Concurrent.ConcurrentQueue<byte[]>();
+
+            Func<object, byte[]> serializeFunc;
+            public MyInterceptor(TcpClient client, ResponseDealer responseDealer, Func<object, byte[]> serializeFunc)
             {
                 this.client = client;
                 this.responseDealer = responseDealer;
+                this.serializeFunc = serializeFunc;
                 Thread thread = new Thread(Sender);
                 thread.IsBackground = true;
                 thread.Start();
@@ -73,20 +79,20 @@ namespace CooRPCCore
 
             public void Intercept(IInvocation invocation)
             {
-                //Console.WriteLine("Intercept ");
                 string fullName = invocation.Method.DeclaringType.FullName;
                 string methodName = invocation.Method.Name;
                 List<object> args = invocation.Arguments.ToList();
 
                 Guid guid = Guid.NewGuid();
-                string request = Newtonsoft.Json.JsonConvert.SerializeObject(new RequestModel { assemblyName = fullName, methodName = methodName, args = args, guid = guid.ToString() });
-                requestMsgs.Enqueue(request + "|");
-                //client.Send(request + "|");
-                //var res = client.GetReceiveMessage(guid);
+                byte[] request = serializeFunc(new RequestModel { assemblyName = fullName, methodName = methodName, args = args, guid = guid.ToString() });
 
-
-                //Console.WriteLine("After Send Now Waitting");
+                byte o = Encoding.ASCII.GetBytes("|")[0];
+                var temp = request.ToList();
+                temp.Add(o);
+                requestMsgs.Enqueue(temp.ToArray());
+                
                 Task<object> tt = responseDealer.GetResult(guid.ToString());
+                
                 invocation.ReturnValue = tt.GetAwaiter().GetResult();
 
             }
@@ -94,7 +100,7 @@ namespace CooRPCCore
             {
                 while (true)
                 {
-                    if (requestMsgs.TryDequeue(out string message))
+                    if (requestMsgs.TryDequeue(out byte[] message))
                     {
                         Console.WriteLine("Start Send");
                         
@@ -110,6 +116,12 @@ namespace CooRPCCore
         public T Create<T>() where T : class, ICoocRPCService<T>
         {
             Console.WriteLine("Create Proxy");
+            if (myIntercept == null)
+            {
+                Console.WriteLine("Please Build Before Create");
+                return null;
+            }
+
             return generator.CreateInterfaceProxyWithoutTarget<T>(myIntercept);
         }
 

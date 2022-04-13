@@ -10,5 +10,10 @@ namespace RPCServices
         {
             return a + b;
         }
+
+        public string StringAdd(string a, string b)
+        {
+            return a + b;
+        }
     }
 }

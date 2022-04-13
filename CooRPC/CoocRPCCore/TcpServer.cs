@@ -12,7 +12,7 @@ namespace CoocRPCCore
     public class TcpMessageModel
     {
         public System.Net.Sockets.TcpClient client { get; set; }
-        public string message { get; set; }
+        public byte[] message { get; set; }
     }
     /// <summary>
     /// 服务端通信对象
@@ -61,9 +61,9 @@ namespace CoocRPCCore
                     while ((i = stream.Read(bytes, 0, bytes.Length)) != 0)
                     {
                         //将借宿字节的数据转换成一个UTF8字符串
-                        data = System.Text.Encoding.UTF8.GetString(bytes, 0, i);
-                        Console.WriteLine(data);
-                        TcpStringQueue.Enqueue(new TcpMessageModel { client = client, message = data});
+                        //data = System.Text.Encoding.UTF8.GetString(bytes, 0, i);
+                        //Console.WriteLine(data);
+                        TcpStringQueue.Enqueue(new TcpMessageModel { client = client, message = bytes });
                     }
                 });
             }

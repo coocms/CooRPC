@@ -6,21 +6,24 @@ namespace RPCServerExec2
 {
     class Program
     {
+        
+
         static void Main(string[] args)
         {
-            var o = typeof(TestService);
-
-
             ThreadPool.SetMinThreads(5000, 500);
 
+            var server = new CooRPCCore.CooRPCServer()
+            .ConfigConnection("0.0.0.0", 8909);
+            server.ConfigSerialize(o =>
+            {
+                return Newtonsoft.Json.JsonConvert.SerializeObject(o);
+            });
+            server.ConfigDeserialize((o, t) =>
+            {
+                return Newtonsoft.Json.JsonConvert.DeserializeObject(o, t);
+            });
 
-
-
-
-            new CooRPCCore.CooRPCServer("0.0.0.0", 8909);
-
-
-
+            server.Build();
 
             while (true)
             {
