@@ -4,6 +4,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Sockets;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -53,7 +54,7 @@ namespace CoocRPCCore
                     
 
                     string data = null;
-                    byte[] bytes = new byte[1024 * 4];
+                    byte[] bytes = new byte[1024];
                     NetworkStream stream = client.GetStream();//获取用于读取和写入的流对象
                     
                     int i;
@@ -63,7 +64,11 @@ namespace CoocRPCCore
                         //将借宿字节的数据转换成一个UTF8字符串
                         //data = System.Text.Encoding.UTF8.GetString(bytes, 0, i);
                         //Console.WriteLine(data);
-                        TcpStringQueue.Enqueue(new TcpMessageModel { client = client, message = bytes });
+                        
+
+
+                        TcpStringQueue.Enqueue(new TcpMessageModel { client = client, message = bytes.Take(i).ToArray() });
+                        
                     }
                 });
             }

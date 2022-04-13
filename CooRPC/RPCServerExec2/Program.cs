@@ -1,5 +1,6 @@
 ﻿using RPCServices;
 using System;
+using System.Text;
 using System.Threading;
 
 namespace RPCServerExec2
@@ -14,13 +15,15 @@ namespace RPCServerExec2
 
             var server = new CooRPCCore.CooRPCServer()
             .ConfigConnection("0.0.0.0", 8909);
+
             server.ConfigSerialize(o =>
             {
-                return Newtonsoft.Json.JsonConvert.SerializeObject(o);
-            });
-            server.ConfigDeserialize((o, t) =>
+                return MessagePack.MessagePackSerializer.Serialize(o);
+
+            })
+            .ConfigDeserialize((o, t) =>
             {
-                return Newtonsoft.Json.JsonConvert.DeserializeObject(o, t);
+                return MessagePack.MessagePackSerializer.Deserialize(t, o);
             });
 
             server.Build();

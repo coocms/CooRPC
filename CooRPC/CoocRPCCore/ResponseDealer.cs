@@ -40,17 +40,27 @@ namespace CooRPCCore
                     if (lastMessage.Length > 0)
                     {
                         //最后一组数据有值
-                        temp = lastMessage.ToList();
+                        if (lastMessage.ToList().Count(o => o != 0) > 0)
+                            temp = lastMessage.ToList();
                     }
 
                     for (int i = bFirstNotParse ? 1 : 0; i < response.Count - 1; i++)
                     {
                         ResponseModel responseModel = null;
 
+                        try
+                        {
+                            responseModel = deserilizeFunc(response[i], typeof(ResponseModel)) as ResponseModel;
+                        }
+                        catch
+                        {
+                            
+                        }
                         
-                        responseModel = deserilizeFunc(response[i], typeof(ResponseModel)) as ResponseModel;
                         if (responseModel == null)
                             continue;
+                        
+
                         responseModels.Enqueue(responseModel);
                     }
 
@@ -61,7 +71,7 @@ namespace CooRPCCore
         static List<byte[]> ByteSplit(byte[] bytes, byte splitByte)
         {
             List<byte[]> res = new List<byte[]>();
-
+            
             List<byte> temp = new List<byte>();
             for (int i = 0; i < bytes.Length; i++)
             {
@@ -71,6 +81,11 @@ namespace CooRPCCore
                     if (temp.Count != 0)
                     {
                         res.Add(temp.ToArray());
+                        //temp.ForEach(o =>
+                        //{
+                        //    Console.Write("{0}  ", o);
+                        //});
+                        //Console.Write("\n\n");
                         temp.Clear();
                     }
                 }
@@ -79,6 +94,7 @@ namespace CooRPCCore
                     temp.Add(bytes[i]);
                 }
             }
+            res.Add(temp.ToArray());
             return res;
         }
         public void DequeueResToList()
@@ -87,6 +103,7 @@ namespace CooRPCCore
             {
                 if (responseModels.TryDequeue(out ResponseModel responseModel))
                 {
+                    //Console.WriteLine(responseModel.guid);
                     lock(responseListLock)
                         responseModelsList.Add(responseModel);
                 }

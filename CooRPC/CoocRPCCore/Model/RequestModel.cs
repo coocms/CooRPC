@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace CooRPCCore.Model
 {
+    [MessagePack.MessagePackObject(true)]
     public class RequestModel
     {
         public string assemblyName { get; set; }

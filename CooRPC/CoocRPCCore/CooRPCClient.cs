@@ -84,11 +84,23 @@ namespace CooRPCCore
                 List<object> args = invocation.Arguments.ToList();
 
                 Guid guid = Guid.NewGuid();
-                byte[] request = serializeFunc(new RequestModel { assemblyName = fullName, methodName = methodName, args = args, guid = guid.ToString() });
+                
 
-                byte o = Encoding.ASCII.GetBytes("|")[0];
+                var mo = new RequestModel
+                {
+                    assemblyName = fullName,
+                    methodName = methodName,
+                    args = args,
+                    guid = guid.ToString()
+                };
+                
+                byte[] request = serializeFunc(mo);
+
+                
                 var temp = request.ToList();
-                temp.Add(o);
+                
+                temp.Add((byte)'|');
+                
                 requestMsgs.Enqueue(temp.ToArray());
                 
                 Task<object> tt = responseDealer.GetResult(guid.ToString());
@@ -115,7 +127,7 @@ namespace CooRPCCore
         
         public T Create<T>() where T : class, ICoocRPCService<T>
         {
-            Console.WriteLine("Create Proxy");
+            
             if (myIntercept == null)
             {
                 Console.WriteLine("Please Build Before Create");

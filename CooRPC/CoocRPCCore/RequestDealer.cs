@@ -117,7 +117,8 @@ namespace CooRPCCore
                 bool bFirstNotParse = false;
                 if (tcpStringQueue.TryDequeue(out TcpMessageModel tcpStringModel))
                 {
-                    //List<string> requests = tcpStringModel.message. Split("|").ToList();
+                    Console.WriteLine("RequestSplit: " + Encoding.ASCII.GetString(tcpStringModel.message).Trim());
+                    
                     List<byte[]> requests = ByteSplit(tcpStringModel.message, ((byte)'|'));
                     if (temp.Count > 0)
                     {
@@ -133,7 +134,8 @@ namespace CooRPCCore
                     if (lastMessage.Length > 0)
                     {
                         //最后一组数据有值
-                        temp = lastMessage.ToList();
+                        if(lastMessage.ToList().Count(o=>o != 0) > 0)
+                            temp = lastMessage.ToList();
                     }
 
                     for (int i = bFirstNotParse ? 1 : 0; i < requests.Count - 1; i++)
@@ -143,6 +145,7 @@ namespace CooRPCCore
 
                         if (request == null)
                             continue;
+
                         requestModelQueue.Enqueue(new RequestModelContext { request = request, client = tcpStringModel.client, guid = request.guid});
                         
                         //var res = Call(request);
@@ -157,8 +160,8 @@ namespace CooRPCCore
         static List<byte[]> ByteSplit(byte[] bytes, byte splitByte)
         {
             List<byte[]> res = new List<byte[]>();
-
             List<byte> temp = new List<byte>();
+
             for (int i = 0; i < bytes.Length; i++)
             {
 
@@ -167,6 +170,11 @@ namespace CooRPCCore
                     if (temp.Count != 0)
                     {
                         res.Add(temp.ToArray());
+                        //temp.ForEach(o =>
+                        //{
+                        //    Console.Write("{0}  ", o);
+                        //});
+                        //Console.Write("\n\n");
                         temp.Clear();
                     }
                 }
@@ -175,6 +183,9 @@ namespace CooRPCCore
                     temp.Add(bytes[i]);
                 }
             }
+
+            res.Add(temp.ToArray());
+
             return res;
         }
 
@@ -193,7 +204,7 @@ namespace CooRPCCore
             }
         }
 
-        public void ResultSendToClient(Func<object, string> serializeFunc)
+        public void ResultSendToClient(Func<object, byte[]> serializeFunc)
         {
             while (true)
             {
@@ -201,8 +212,10 @@ namespace CooRPCCore
                 if (resultModelQueue.TryDequeue(out resultModel))
                 {
                     System.Net.Sockets.TcpClient client = resultModel.client;
-                    string responseMessage = serializeFunc(new ResponseModel { resultList = resultModel.result, guid = resultModel.guid });
-                    client.GetStream().WriteAsync(Encoding.UTF8.GetBytes(responseMessage + "|"));
+                    byte[] responseMessage = serializeFunc(new ResponseModel { resultList = resultModel.result, guid = resultModel.guid });
+                    List<byte> temp = responseMessage.ToList();
+                    temp.Add((byte)'|');
+                    client.GetStream().WriteAsync(temp.ToArray());
                 }
                 Thread.Sleep(10);
             }
