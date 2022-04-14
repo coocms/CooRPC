@@ -53,8 +53,8 @@ namespace CooRPCCore
         }
         public void Send(byte[] bytes)
         {
-            tcpClient.Send(bytes);
-            //tcpClient.BeginSend(bytes, 0, bytes.Length, 0, null, null);
+            //tcpClient.Send(bytes);
+            tcpClient.BeginSend(bytes, 0, bytes.Length, 0, null, null);
         }
         List<string> receiveMessages = new List<string>();
         private readonly object msgLock = new object();

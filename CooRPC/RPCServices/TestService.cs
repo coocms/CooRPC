@@ -15,5 +15,13 @@ namespace RPCServices
         {
             return a + b;
         }
+
+        public TestRes StringAddPro(string a, string b)
+        {
+            return new TestRes() { res = a + b, test = "Test" };
+        }
     }
+
+
+
 }

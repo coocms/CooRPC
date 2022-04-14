@@ -40,14 +40,15 @@ namespace ClientExec2
                     Stopwatch stopwatch = new Stopwatch();
                     stopwatch.Start();
                     int count = 0;
-                    for (long i = 0; i < 1000; i++)
+                    for (long i = 0; i < 100; i++)
                     {
 
                         long ii = i;
                         Task.Run(() =>
                         {
-                            string res2 = service.StringAdd(ii.ToString(), ii.ToString());
-                            Console.WriteLine(ii + " Return" + res2);
+                            //string res2 = service.StringAdd(ii.ToString(), ii.ToString());
+                            var res = service.StringAddPro(ii.ToString(), ii.ToString());
+                            Console.WriteLine(ii + " Return" + res.res + " " + res.test );
                         });
 
                     }

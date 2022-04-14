@@ -30,7 +30,7 @@ namespace CooRPCCore
             thread.IsBackground = true;
             thread.Start();
 
-            Thread thread2 = new Thread(() => dealer.RequestDeal());
+            Thread thread2 = new Thread(() => dealer.RequestDeal(serializeFunc));
             thread2.IsBackground = true;
             thread2.Start();
 

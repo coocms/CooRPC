@@ -49,7 +49,7 @@ namespace CooRPCCore
         {
             client.Start();
 
-            myIntercept = new MyInterceptor(client, responseDealer, serializeFunc);
+            myIntercept = new MyInterceptor(client, responseDealer, serializeFunc, deserializeFunc);
 
             Thread thread = new Thread(() => responseDealer.ResponseSplit(client, deserializeFunc));
             thread.IsBackground = true;
@@ -67,11 +67,13 @@ namespace CooRPCCore
             System.Collections.Concurrent.ConcurrentQueue<byte[]> requestMsgs = new System.Collections.Concurrent.ConcurrentQueue<byte[]>();
 
             Func<object, byte[]> serializeFunc;
-            public MyInterceptor(TcpClient client, ResponseDealer responseDealer, Func<object, byte[]> serializeFunc)
+            Func<byte[], Type, object> deserializeFunc;
+            public MyInterceptor(TcpClient client, ResponseDealer responseDealer, Func<object, byte[]> serializeFunc, Func<byte[], Type, object> deserializeFunc)
             {
                 this.client = client;
                 this.responseDealer = responseDealer;
                 this.serializeFunc = serializeFunc;
+                this.deserializeFunc = deserializeFunc;
                 Thread thread = new Thread(Sender);
                 thread.IsBackground = true;
                 thread.Start();
@@ -103,9 +105,13 @@ namespace CooRPCCore
                 
                 requestMsgs.Enqueue(temp.ToArray());
                 
-                Task<object> tt = responseDealer.GetResult(guid.ToString());
+                Task<byte[]> tt = responseDealer.GetResult(guid.ToString());
+                var res = tt.GetAwaiter().GetResult();
                 
-                invocation.ReturnValue = tt.GetAwaiter().GetResult();
+                var returnType = invocation.Method.ReturnType;
+                
+
+                invocation.ReturnValue = deserializeFunc(res, returnType);
 
             }
             public void Sender()

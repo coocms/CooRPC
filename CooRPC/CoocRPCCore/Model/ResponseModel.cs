@@ -10,7 +10,7 @@ namespace CooRPCCore.Model
     public class ResponseModel
     {
         
-        public object resultList { get; set; }
+        public byte[] result { get; set; }
         public string guid { get; set; }
     }
 }

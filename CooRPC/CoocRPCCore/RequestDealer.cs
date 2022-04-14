@@ -23,7 +23,7 @@ namespace CooRPCCore
     }
     class ResultModel
     {
-        public object result { get; set; }
+        public byte[] result { get; set; }
         public System.Net.Sockets.TcpClient client { get; set; }
 
         public string guid { get; set; }
@@ -189,7 +189,7 @@ namespace CooRPCCore
             return res;
         }
 
-        public void RequestDeal()
+        public void RequestDeal(Func<object, byte[]> serializeFunc)
         {
             while (true)
             {
@@ -197,7 +197,7 @@ namespace CooRPCCore
                 if (requestModelQueue.TryDequeue(out requestModel))
                 {
                     object res = Call(requestModel.request);
-                    resultModelQueue.Enqueue(new ResultModel { result = res, client = requestModel.client, guid = requestModel.guid });
+                    resultModelQueue.Enqueue(new ResultModel { result = serializeFunc(res), client = requestModel.client, guid = requestModel.guid });
 
                 }
                 Thread.Sleep(10);
@@ -212,7 +212,7 @@ namespace CooRPCCore
                 if (resultModelQueue.TryDequeue(out resultModel))
                 {
                     System.Net.Sockets.TcpClient client = resultModel.client;
-                    byte[] responseMessage = serializeFunc(new ResponseModel { resultList = resultModel.result, guid = resultModel.guid });
+                    byte[] responseMessage = serializeFunc(new ResponseModel { result = resultModel.result, guid = resultModel.guid });
                     List<byte> temp = responseMessage.ToList();
                     temp.Add((byte)'|');
                     client.GetStream().WriteAsync(temp.ToArray());

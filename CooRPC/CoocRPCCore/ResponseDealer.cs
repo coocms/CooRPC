@@ -48,14 +48,9 @@ namespace CooRPCCore
                     {
                         ResponseModel responseModel = null;
 
-                        try
-                        {
+
                             responseModel = deserilizeFunc(response[i], typeof(ResponseModel)) as ResponseModel;
-                        }
-                        catch
-                        {
-                            
-                        }
+
                         
                         if (responseModel == null)
                             continue;
@@ -111,7 +106,7 @@ namespace CooRPCCore
             }
         }
 
-        public async Task<object> GetResult(string guid)
+        public async Task<byte[]> GetResult(string guid)
         {
             return await Task.Run(() =>
             {
@@ -128,7 +123,7 @@ namespace CooRPCCore
                             responseModelsList = responseModelsList.Where(o => o.guid != guid).ToList();
                         }
 
-                        return temp.resultList;
+                        return temp.result;
                     }
 
 
