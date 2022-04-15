@@ -76,11 +76,7 @@ namespace CooRPCCore
                     if (temp.Count != 0)
                     {
                         res.Add(temp.ToArray());
-                        //temp.ForEach(o =>
-                        //{
-                        //    Console.Write("{0}  ", o);
-                        //});
-                        //Console.Write("\n\n");
+
                         temp.Clear();
                     }
                 }

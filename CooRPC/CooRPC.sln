@@ -15,7 +15,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Exec", "Exec", "{924F0808-8
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClientExec2", "ClientExec2\ClientExec2.csproj", "{9C0F22D8-712F-4F25-953C-1E0484235509}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RPCServerExec2", "RPCServerExec2\RPCServerExec2.csproj", "{C40E1542-58E4-4152-97D6-DF35214668AA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RPCServerExec2", "RPCServerExec2\RPCServerExec2.csproj", "{C40E1542-58E4-4152-97D6-DF35214668AA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExecDemoOutNuget", "ExecDemoOutNuget\ExecDemoOutNuget.csproj", "{D521A197-7DA2-48EA-85A4-7B149A3461E6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -43,6 +45,10 @@ Global
 		{C40E1542-58E4-4152-97D6-DF35214668AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C40E1542-58E4-4152-97D6-DF35214668AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C40E1542-58E4-4152-97D6-DF35214668AA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D521A197-7DA2-48EA-85A4-7B149A3461E6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D521A197-7DA2-48EA-85A4-7B149A3461E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D521A197-7DA2-48EA-85A4-7B149A3461E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D521A197-7DA2-48EA-85A4-7B149A3461E6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

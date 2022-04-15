@@ -11,7 +11,7 @@ namespace CooRPCCore.Model
     {
         public string assemblyName { get; set; }
         public string methodName { get; set; }
-        public List<dynamic> args { get; set; }
+        public List<byte[]> args { get; set; }
         public string guid { get; set; }
     }
 }

@@ -20,6 +20,11 @@ namespace RPCServices
         {
             return new TestRes() { res = a + b, test = "Test" };
         }
+
+        public TestTypeA StringAddPro2(TestTypeA a, TestTypeA b)
+        {
+            return new TestTypeA() { str = a.str + b.str };
+        }
     }
 
 

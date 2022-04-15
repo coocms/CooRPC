@@ -82,7 +82,7 @@ namespace CooRPCCore
             container = builder.Build();
         }
 
-        public static object Call(RequestModel requestModel)
+        public static object Call(RequestModel requestModel, Func<byte[], Type, object> deserializeFunc)
         {
             Type iServiceType = iServiceTypes.FirstOrDefault(o => o.FullName == requestModel.assemblyName);
             if (iServiceType == null)
@@ -90,9 +90,9 @@ namespace CooRPCCore
                 Console.WriteLine("iServiceType = null");
                 return null;
             }
-                
-            var service = container.Resolve(iServiceType);
-            var method = service.GetType().GetMethods().FirstOrDefault(o => o.Name == requestModel.methodName);
+
+            object service = container.Resolve(iServiceType);
+            MethodInfo method = service.GetType().GetMethods().FirstOrDefault(o => o.Name == requestModel.methodName && o.GetParameters().Length == requestModel.args.Count);
             if (method == null)
             {
                 Console.WriteLine("method = null");
@@ -104,8 +104,16 @@ namespace CooRPCCore
                 Console.WriteLine("!(method.GetParameters().Count() == requestModel.args.Count)");
                 return null;
             }
+            List<object> argsArray = new List<object>();
+            ParameterInfo[] pp = method.GetParameters();
+            for (int i = 0; i < requestModel.args.Count; i++)
+            {
+                Type target = pp[i].ParameterType;
+                argsArray.Add(deserializeFunc(requestModel.args[i], target));
+            }
             
-            var res = method.Invoke(service, requestModel.args.ToArray());
+
+            var res = method.Invoke(service, argsArray.ToArray());
             return res;
         }
         public void RequestSplit(TcpServer server, Func<byte[], Type, object> deserializeFunc)
@@ -189,14 +197,14 @@ namespace CooRPCCore
             return res;
         }
 
-        public void RequestDeal(Func<object, byte[]> serializeFunc)
+        public void RequestDeal(Func<object, byte[]> serializeFunc, Func<byte[], Type, object> deserializeFunc)
         {
             while (true)
             {
                 RequestModelContext requestModel;
                 if (requestModelQueue.TryDequeue(out requestModel))
                 {
-                    object res = Call(requestModel.request);
+                    object res = Call(requestModel.request, deserializeFunc);
                     resultModelQueue.Enqueue(new ResultModel { result = serializeFunc(res), client = requestModel.client, guid = requestModel.guid });
 
                 }

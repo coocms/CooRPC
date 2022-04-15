@@ -85,6 +85,11 @@ namespace CooRPCCore
                 string methodName = invocation.Method.Name;
                 List<object> args = invocation.Arguments.ToList();
 
+                List<byte[]> snedArgs = new List<byte[]>();
+                args.ForEach(o =>
+                {
+                    snedArgs.Add(serializeFunc(o));
+                });
                 Guid guid = Guid.NewGuid();
                 
 
@@ -92,7 +97,7 @@ namespace CooRPCCore
                 {
                     assemblyName = fullName,
                     methodName = methodName,
-                    args = args,
+                    args = snedArgs,
                     guid = guid.ToString()
                 };
                 
@@ -121,8 +126,8 @@ namespace CooRPCCore
                     if (requestMsgs.TryDequeue(out byte[] message))
                     {
                         Console.WriteLine("Start Send");
-                        
-                        client.Send(message);
+                        if(message.Length > 0)
+                            client.Send(message);
                     }
                     Thread.Sleep(1);
                 }

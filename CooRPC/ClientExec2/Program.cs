@@ -22,7 +22,7 @@ namespace ClientExec2
                 Task.Run(() =>
                 {
                     var cooClient = new CooRPCClient();
-                    cooClient.ConfigConnection("127.0.0.1", 8909);
+                    cooClient.ConfigConnection("81.68.119.59", 30888);
                     cooClient.ConfigSerialize(o =>
                     {
                         return MessagePack.MessagePackSerializer.Serialize(o);
@@ -47,8 +47,8 @@ namespace ClientExec2
                         Task.Run(() =>
                         {
                             //string res2 = service.StringAdd(ii.ToString(), ii.ToString());
-                            var res = service.StringAddPro(ii.ToString(), ii.ToString());
-                            Console.WriteLine(ii + " Return" + res.res + " " + res.test );
+                            var res = service.StringAddPro2(new TestTypeA { str = ii.ToString()}, new TestTypeA { str = ii.ToString()} );
+                            Console.WriteLine(ii + " Return" + res.str);
                         });
 
                     }
